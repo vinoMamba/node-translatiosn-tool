@@ -4,8 +4,10 @@ import md5 = require('md5');
 import {appid, secretKey} from './private';
 
 export const translate = (word: string) => {
-
-    const errorMap = {
+    type ErrorMap = {
+        [key: string]: string
+    }
+    const errorMap: ErrorMap = {
         52000: '成功',
         52001: '请求超时',
         52002: '系统错误',
