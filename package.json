@@ -8,9 +8,11 @@
     "cli": "ts-node-dev src/cli.ts"
   },
   "dependencies": {
-    "commander": "^7.1.0"
+    "commander": "^7.1.0",
+    "md5": "^2.3.0"
   },
   "devDependencies": {
+    "@types/md5": "^2.3.0",
     "@types/node": "^14.14.35"
   }
 }
