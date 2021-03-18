@@ -3,8 +3,23 @@ import * as querystring from 'querystring';
 import md5 = require('md5');
 import {appid, secretKey} from './private';
 
-export const translate = (word) => {
+export const translate = (word: string) => {
 
+    const errorMap = {
+        52000: '成功',
+        52001: '请求超时',
+        52002: '系统错误',
+        52003: '未授权用户',
+        54000: '必填参数为空',
+        54001: '签名错误',
+        54003: '访问频率受限',
+        54004: '账户余额不足',
+        54005: '长query请求频繁',
+        58000: '客户端ip非法',
+        58001: '译文语言方向不支持',
+        58002: '服务当前已关闭',
+        90107: '认证未通过或未生效'
+    };
     const salt = Math.random();
     const sign = md5(appid + word + salt + secretKey);
     const query: string = querystring.stringify({
@@ -22,8 +37,8 @@ export const translate = (word) => {
         method: 'GET'
     };
     const request = https.request(options, (response) => {
-        const chunks = [];
-        response.on('data', (chunk) => {
+        const chunks: Buffer[] = [];
+        response.on('data', (chunk: Buffer) => {
             chunks.push(chunk);
         });
         response.on('end', () => {
@@ -41,7 +56,7 @@ export const translate = (word) => {
             }
             const object: HeiduResult = JSON.parse(string);
             if (object.error_code) {
-                console.error(`ErrorMessage:${object.error_msg}`);
+                console.error(`翻译报错：${errorMap[object.error_code]}` || object.error_msg);
                 process.exit(2);
             } else {
                 console.log(object.trans_result[0].dst);
